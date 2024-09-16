@@ -1,0 +1,58 @@
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        // Display student information
+        System.out.println("Studenta apliecības numurs: 231REB038");
+        System.out.println("Vārds: Edgars");
+        System.out.println("Uzvārds: Radzivilcuks");
+
+        // Display variant number
+        System.out.println("24. variants");
+
+        Scanner scanner = new Scanner(System.in);
+
+        // Input x and y coordinates
+        System.out.print("x= ");
+        double x = scanner.nextDouble();
+
+        System.out.print("y= ");
+        double y = scanner.nextDouble();
+
+        // Check which area the point (x, y) belongs to and output result
+        String result = getResult(x, y);
+        System.out.println("result: " + result);
+    }
+
+    // Function to determine if the point is in the white or grey area
+    public static String getResult(double x, double y) {
+        // Check if the point is inside the circle (center at (6, 4), radius 2)
+        double circleCenterX = 6;
+        double circleCenterY = 4;
+        double radius = 2;
+        boolean inCircle = Math.pow(x - circleCenterX, 2) + Math.pow(y - circleCenterY, 2) <= Math.pow(radius, 2);
+
+        // Check if the point is inside the square (with vertices (5, 3), (5, 5), (7, 3), (7, 5))
+        boolean inSquare = (x >= 5 && x <= 7 && y >= 3 && y <= 5);
+
+        // Check if the point is inside the triangle (with vertices (2, 2), (2, 7), (4, 2))
+        boolean inTriangle = isPointInTriangle(x, y, 2, 2, 2, 7, 4, 2);
+
+        // Determine the result based on the region
+        if (inCircle || inSquare || inTriangle) {
+            return "white";
+        } else {
+            return "grey";
+        }
+    }
+
+    // Function to check if a point is inside a triangle using the barycentric technique
+    public static boolean isPointInTriangle(double px, double py, double x1, double y1, double x2, double y2, double x3, double y3) {
+        double denominator = ((y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3));
+        double a = ((y2 - y3) * (px - x3) + (x3 - x2) * (py - y3)) / denominator;
+        double b = ((y3 - y1) * (px - x3) + (x1 - x3) * (py - y3)) / denominator;
+        double c = 1 - a - b;
+        return 0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1;
+    }
+}
